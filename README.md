@@ -15,6 +15,8 @@ everything lives in [`index.html`](index.html).
   computer keyboard across two octaves:
   - lower octave: `Z S X D C V G B H N J M`
   - upper octave: `Q 2 W 3 E R 5 T 6 Y 7 U`
+- **Random** — a header button that picks one of the sample songs at random (never the one
+  already selected) and plays it from the top.
 - **Octave shift** — move the two-octave window from C2–B3 up to C6–B7.
 - **Sustain pedal** toggle, volume slider with mute, and an on/off note-name overlay.
 - **Auto-play songs** — five two-hand arrangements (Canon in D, Bella Ciao, Wedding March,
