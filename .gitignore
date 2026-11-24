@@ -11,3 +11,6 @@ Desktop.ini
 # Local scratch
 node_modules/
 *.log
+
+# Wrangler local cache / temp (holds your Cloudflare account id)
+.wrangler/

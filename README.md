@@ -4,7 +4,8 @@ A single-file, browser-based virtual piano with sampled grand-piano sound, auto-
 song arrangements, and a chord helper. No build step, no dependencies to install —
 everything lives in [`index.html`](index.html).
 
-**Live demo:** https://manfriendsss.github.io/virtual-piano/
+**Live demo:** https://manfriendsss.github.io/virtual-piano/ (GitHub Pages)
+**Also deployed at:** https://virtual-piano.manfriendsss.workers.dev (Cloudflare Workers)
 
 ## Features
 
@@ -43,6 +44,21 @@ so the first click or key press unlocks the audio engine.
 
 An internet connection is needed on first load: Tailwind CSS, the Inter font, Tone.js, and
 the piano samples all come from CDNs.
+
+## Deploying
+
+The site is static, so there is nothing to build.
+
+- **GitHub Pages** — serves `index.html` from `main`; pushing updates it.
+- **Cloudflare Workers** — a static-assets-only Worker configured in
+  [`wrangler.jsonc`](wrangler.jsonc). Redeploy with:
+
+  ```powershell
+  npx wrangler deploy
+  ```
+
+  [`.assetsignore`](.assetsignore) keeps everything except `index.html` out of the upload —
+  leave `.git/**` and `.wrangler/**` in it, or local metadata ends up publicly served.
 
 ## Built with
 
