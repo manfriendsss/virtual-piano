@@ -1,67 +1,46 @@
-# Virtual Piano
+# Music Studio
 
-A single-file, browser-based virtual piano with sampled grand-piano sound, auto-playing
-song arrangements, and a chord helper. No build step, no dependencies to install —
-everything lives in [`index.html`](index.html).
+Ứng dụng âm nhạc nhiều nhạc cụ (React + Vite + Tailwind v4 + Tone.js), chuyển từ `index.original.html`.
 
-**Live demo:** https://manfriendsss.github.io/virtual-piano/ (GitHub Pages)
-**Also deployed at:** https://virtual-piano.manfriendsss.workers.dev (Cloudflare Workers)
+- **Độc tấu**: một nhạc cụ chơi bài. Nhạc cụ hợp âm (piano, guitar, harp…) chơi trọn bài; nhạc cụ đơn âm (violin, sáo, kèn…) chơi giai điệu; nhạc cụ trầm chơi bass; trống chơi nhịp.
+- **Hoà tấu**: mixer theo bè (giai điệu, bè phụ, đệm, bass, nền hoà âm, trống). Mỗi bè có nhạc cụ, âm lượng, M (tắt tiếng), S (chỉ nghe bè này). Có preset Gợi ý cho bài, Giao hưởng, Tứ tấu dây, Ban nhạc pop, Acoustic, Kèn đồng, Bộ gỗ, Bộ gõ.
+- Bàn phím có thể chơi bằng bất kỳ nhạc cụ nào, kể cả bộ trống.
 
-## Features
+Sample: Salamander Grand Piano và [tonejs-instruments](https://github.com/nbrosowsky/tonejs-instruments) (CC-BY 3.0), tải từ CDN khi dùng lần đầu. Marimba, glockenspiel, timpani và bộ trống được tổng hợp bằng Tone.js.
 
-- **Sampled grand piano** — Tone.js `Sampler` loaded with Salamander Grand Piano samples,
-  routed through a subtle reverb and a master volume stage. Falls back to a `PolySynth`
-  if the samples cannot be fetched.
-- **Playable three ways** — mouse/pointer, multi-touch (several keys at once), or the
-  computer keyboard across two octaves:
-  - lower octave: `Z S X D C V G B H N J M`
-  - upper octave: `Q 2 W 3 E R 5 T 6 Y 7 U`
-- **Random** — a header button that picks one of the sample songs at random (never the one
-  already selected) and plays it from the top.
-- **Octave shift** — move the two-octave window from C2–B3 up to C6–B7.
-- **Sustain pedal** toggle, volume slider with mute, and an on/off note-name overlay.
-- **Auto-play songs** — five two-hand arrangements (Canon in D, Bella Ciao, Wedding March,
-  Ode to Joy, Jingle Bells) with play/pause, stop, 0.5×–1.25× speed, and a scrubbable
-  progress bar. The keyboard auto-expands to the song's range; "Free Play" returns it to
-  two octaves.
-- **Chord helper** — C, Dm, Em, F, G, Am, Bdim and G7. Picking a chord tints the keys to
-  play, and it can be struck as a block chord.
-- **Colour-coded key feedback** — ocean blue for your own presses and the auto-play right
-  hand, warm orange for the left hand and chord guides, with a warm, glare-free palette
-  (no pure white or pure black anywhere).
-- **Responsive** — the keyboard scrolls sideways on narrow screens, with a swipe hint.
+## Chạy
 
-## Running it
-
-Just open `index.html` in a browser, or serve the folder:
-
-```powershell
-python -m http.server 8000
+```bash
+npm install
+npm run dev      # http://localhost:5173
+npm run build    # xuất ra dist/
 ```
 
-Then visit http://localhost:8000. Browsers require a user gesture before audio can start,
-so the first click or key press unlocks the audio engine.
+## Cấu trúc
 
-An internet connection is needed on first load: Tailwind CSS, the Inter font, Tone.js, and
-the piano samples all come from CDNs.
+```
+src/
+  lib/music.js              hằng số & tiện ích nốt nhạc (MIDI, phím tắt, hợp âm)
+  songs/                    mỗi bài một file + buildSong.js, helpers.js, index.js (metadata)
+  engine/instruments.js     danh mục nhạc cụ (sample, tầm âm, vai trò)
+  engine/voices.js          voice sampler / synth / bộ trống tổng hợp
+  engine/audio.js           AudioEngine: tải nhạc cụ khi cần, reverb, limiter, master volume
+  engine/arrange.js         tách bài thành bè, sinh nền hoà âm và trống, preset hoà tấu
+  engine/PianoController.js toàn bộ logic: nốt tay, sustain, hợp âm, lịch phát bài
+  hooks/                    PianoProvider, usePiano (useSyncExternalStore), phím máy tính
+  components/
+    layout/   Card, Header, StatusPill
+    songs/    SongLibrary, SongCard
+    player/   PlayerCard, TransportButtons, SpeedSelector, ProgressBar, HandLegend
+    controls/ ControlBar, OctaveControl, VolumeControl, ToggleButton
+    chords/   ChordHelper
+    ensemble/ EnsembleCard, MixerTrack
+    instruments/ InstrumentGrid, InstrumentSelect
+    keyboard/ KeyboardCard, Keyboard, PianoKey
+```
 
-## Deploying
+Thêm bài mới: tạo file trong `src/songs/` theo mẫu `buildSong(...)`, rồi khai báo trong `src/songs/index.js`.
 
-The site is static, so there is nothing to build.
+## Deploy (Cloudflare Workers)
 
-- **GitHub Pages** — serves `index.html` from `main`; pushing updates it.
-- **Cloudflare Workers** — a static-assets-only Worker configured in
-  [`wrangler.jsonc`](wrangler.jsonc). Redeploy with:
-
-  ```powershell
-  npx wrangler deploy
-  ```
-
-  [`.assetsignore`](.assetsignore) keeps everything except `index.html` out of the upload —
-  leave `.git/**` and `.wrangler/**` in it, or local metadata ends up publicly served.
-
-## Built with
-
-- [Tone.js](https://tonejs.github.io/) 14.8.49 — Web Audio scheduling, sampler, reverb
-- [Salamander Grand Piano](https://theremin.music.uiowa.edu/) samples, served via the Tone.js CDN
-- [Tailwind CSS](https://tailwindcss.com/) (CDN build) and the Inter typeface
+`wrangler.jsonc` phục vụ thư mục `dist/`. Chạy `npm run build` trước `npx wrangler deploy`; nếu dùng Workers Builds nối với GitHub, đặt build command là `npm run build`.

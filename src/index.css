@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600&display=swap');
+@import 'tailwindcss';
+
+/* Warm, eye-friendly palette (no pure white / pure black) */
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+
+  --color-canvas: #f3f0e9;
+  --color-card: #faf8f4;
+  --color-subtle: #f1ede4;
+  --color-subtle-hover: #e8e2d6;
+  --color-line: #e5dfd3;
+  --color-line-soft: #ece7dd;
+  --color-ink: #2d2b28;
+  --color-ink-soft: #726d65;
+  --color-ink-faint: #a39c91;
+  --color-paper: #f8f6f2;
+
+  --color-ocean: #4e94be;
+  --color-ocean-deep: #3a7ba3;
+  --color-ocean-ink: #295975;
+  --color-amber: #e28c4d;
+  --color-amber-deep: #c97335;
+  --color-amber-ink: #8a4f1c;
+  --color-sage: #6a9e78;
+
+  --animate-soft-pulse: softPulse 1.3s ease-in-out infinite;
+}
+
+@keyframes softPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.42; transform: scale(0.84); }
+}
+
+@keyframes eqBar {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+
+:root {
+  --white-key: #fcfbf8;
+  --white-key-hover: #f5f1e9;
+  --white-key-border: #ddd6c9;
+  --white-key-lip: #d6cebf;
+  --black-key: #302e2b;
+  --black-key-top: #3e3b37;
+  --black-key-bevel: #22201e;
+  --ocean-white: #4e94be;
+  --ocean-white-top: #4589b3;
+  --ocean-white-lip: #387296;
+  --ocean-black: #3a7ba3;
+  --ocean-black-top: #4688b0;
+  --ocean-black-bevel: #2c6182;
+  --orange-white: #e28c4d;
+  --orange-white-top: #d98142;
+  --orange-white-lip: #b8672d;
+  --orange-black: #c97335;
+  --orange-black-top: #d68143;
+  --orange-black-bevel: #a15824;
+  --chord-white-tint: #f7e1ce;
+  --chord-white-lip: #e28c4d;
+  --chord-black-tint: #b86a33;
+  --chord-black-bevel: #915123;
+  --press-text: #f8f6f2;
+}
+
+* { -webkit-tap-highlight-color: transparent; }
+
+body {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #f9e9d9 0%, transparent 60%),
+    radial-gradient(900px 500px at 110% 0%, #dde9f0 0%, transparent 55%),
+    var(--color-canvas);
+  background-attachment: fixed;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Equalizer bars on the playing song */
+.eq-bar {
+  transform-origin: bottom;
+  animation: eqBar 0.9s ease-in-out infinite;
+}
+.eq-bar:nth-child(2) { animation-delay: -0.3s; }
+.eq-bar:nth-child(3) { animation-delay: -0.6s; }
+
+/* Hidden scrollbar on the keyboard, scroll still works */
+.piano-scroll { scrollbar-width: none; }
+.piano-scroll::-webkit-scrollbar { display: none; }
+
+/* Subtle warm scrollbar on desktop song library */
+@media (min-width: 1024px) {
+  .song-list-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #d6cebf transparent;
+  }
+  .song-list-scroll::-webkit-scrollbar { width: 5px; }
+  .song-list-scroll::-webkit-scrollbar-track { background: transparent; }
+  .song-list-scroll::-webkit-scrollbar-thumb {
+    background: #d6cebf;
+    border-radius: 9999px;
+  }
+}
+
+.piano-bed {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Warm volume slider */
+input[type='range'].warm-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+input[type='range'].warm-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #4e94be var(--fill, 0%), #e2dbd0 var(--fill, 0%));
+}
+input[type='range'].warm-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 9999px;
+  background: #4e94be;
+  border: 2px solid #faf8f4;
+  box-shadow: 0 1px 4px rgba(45, 43, 40, 0.22);
+  margin-top: -4.5px;
+  transition: transform 120ms ease;
+}
+input[type='range'].warm-slider:hover::-webkit-slider-thumb { transform: scale(1.12); }
+input[type='range'].warm-slider::-moz-range-track { height: 6px; border-radius: 9999px; background: #e2dbd0; }
+input[type='range'].warm-slider::-moz-range-progress { height: 6px; border-radius: 9999px; background: #4e94be; }
+input[type='range'].warm-slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 9999px;
+  background: #4e94be;
+  border: 2px solid #faf8f4;
+  box-shadow: 0 1px 4px rgba(45, 43, 40, 0.22);
+}
+
+/* ================= WHITE KEYS ================= */
+.key-white {
+  background: linear-gradient(180deg, #f7f4ed 0%, var(--white-key) 12%, var(--white-key) 100%);
+  border-right: 1px solid var(--white-key-border);
+  border-bottom: 5px solid var(--white-key-lip);
+  box-shadow: inset 0 1px 0 rgba(252, 251, 248, 0.92), 0 2px 3px rgba(45, 43, 40, 0.05);
+  transition: background 60ms ease-out, transform 50ms ease-out, border-bottom-width 50ms ease-out, box-shadow 60ms ease-out;
+}
+.key-white:last-child { border-right: none; }
+@media (hover: hover) {
+  .key-white:not(.is-manual):not(.is-auto-rh):not(.is-auto-lh):not(.is-chord):hover { background: var(--white-key-hover); }
+}
+.key-white.is-chord {
+  background: linear-gradient(180deg, #f4d8be 0%, var(--chord-white-tint) 100%);
+  border-bottom-color: var(--chord-white-lip);
+}
+.key-white.is-chord .key-note-label { color: #8f4918; font-weight: 600; }
+.key-white.is-chord .key-shortcut-label { color: #a45721; }
+.key-white.is-auto-lh {
+  background: linear-gradient(180deg, var(--orange-white-top) 0%, var(--orange-white) 100%);
+  border-bottom-width: 2px;
+  border-bottom-color: var(--orange-white-lip);
+  transform: translateY(2.5px);
+  box-shadow: inset 0 2px 5px rgba(45, 43, 40, 0.16);
+}
+.key-white.is-auto-rh,
+.key-white.is-manual {
+  background: linear-gradient(180deg, var(--ocean-white-top) 0%, var(--ocean-white) 100%);
+  border-bottom-width: 2px;
+  border-bottom-color: var(--ocean-white-lip);
+  transform: translateY(2.5px);
+  box-shadow: inset 0 2px 5px rgba(45, 43, 40, 0.16);
+}
+.key-white.is-auto-lh .key-note-label,
+.key-white.is-auto-lh .key-shortcut-label,
+.key-white.is-auto-rh .key-note-label,
+.key-white.is-auto-rh .key-shortcut-label,
+.key-white.is-manual .key-note-label,
+.key-white.is-manual .key-shortcut-label { color: var(--press-text); }
+
+/* ================= BLACK KEYS ================= */
+.key-black {
+  background: linear-gradient(180deg, var(--black-key-top) 0%, var(--black-key) 82%, #282623 100%);
+  border-bottom: 6px solid var(--black-key-bevel);
+  border-left: 1px solid #403d39;
+  border-right: 1px solid #242220;
+  box-shadow: 0 5px 10px -2px rgba(45, 43, 40, 0.36), inset 0 1px 0 rgba(250, 248, 244, 0.14);
+  transition: background 60ms ease-out, transform 50ms ease-out, border-bottom-width 50ms ease-out, box-shadow 60ms ease-out;
+}
+@media (hover: hover) {
+  .key-black:not(.is-manual):not(.is-auto-rh):not(.is-auto-lh):not(.is-chord):hover {
+    background: linear-gradient(180deg, #484440 0%, #383532 82%, #2c2a27 100%);
+  }
+}
+.key-black.is-chord {
+  background: linear-gradient(180deg, #ca783d 0%, var(--chord-black-tint) 100%);
+  border-bottom-color: var(--chord-black-bevel);
+}
+.key-black.is-auto-lh {
+  background: linear-gradient(180deg, var(--orange-black-top) 0%, var(--orange-black) 100%);
+  border-bottom-width: 2px;
+  border-bottom-color: var(--orange-black-bevel);
+  transform: translateY(3px);
+  box-shadow: 0 2px 4px rgba(45, 43, 40, 0.26), inset 0 1px 3px rgba(45, 43, 40, 0.18);
+}
+.key-black.is-auto-rh,
+.key-black.is-manual {
+  background: linear-gradient(180deg, var(--ocean-black-top) 0%, var(--ocean-black) 100%);
+  border-bottom-width: 2px;
+  border-bottom-color: var(--ocean-black-bevel);
+  transform: translateY(3px);
+  box-shadow: 0 2px 4px rgba(45, 43, 40, 0.26), inset 0 1px 3px rgba(45, 43, 40, 0.18);
+}
+.key-black.is-chord .key-note-label,
+.key-black.is-chord .key-shortcut-label,
+.key-black.is-auto-lh .key-note-label,
+.key-black.is-auto-lh .key-shortcut-label,
+.key-black.is-auto-rh .key-note-label,
+.key-black.is-auto-rh .key-shortcut-label,
+.key-black.is-manual .key-note-label,
+.key-black.is-manual .key-shortcut-label { color: var(--press-text); }
+
+/* Chord guide dot */
+.chord-dot {
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 140ms ease, transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.is-chord .chord-dot { opacity: 1; transform: scale(1); }
+
+/* Hide note names for memory practice */
+.key-note-label { transition: opacity 140ms ease, transform 140ms ease, color 60ms ease; }
+.labels-hidden .key-note-label { opacity: 0; transform: translateY(2px); }

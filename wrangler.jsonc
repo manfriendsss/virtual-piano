@@ -1,9 +1,10 @@
 {
-  // Static-assets-only Worker: no server code, Cloudflare just serves index.html.
+  // Static-assets-only Worker serving the Vite build output.
+  // Build first: `npm run build` (Cloudflare Workers Builds: set build command to `npm run build`).
   "name": "virtual-piano",
   "compatibility_date": "2026-11-24",
   "assets": {
-    "directory": "./",
-    "not_found_handling": "none"
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
   }
 }

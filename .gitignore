@@ -1,3 +1,7 @@
+# Dependencies & build output
+node_modules/
+dist/
+
 # OS cruft
 Thumbs.db
 Desktop.ini
@@ -9,7 +13,6 @@ Desktop.ini
 *.swp
 
 # Local scratch
-node_modules/
 *.log
 
 # Wrangler local cache / temp (holds your Cloudflare account id)
